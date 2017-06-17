@@ -1,0 +1,152 @@
+/* Empty. Add your own CSS if you like */
+.queses {
+      background: #fff;
+    width: 100%;
+    border: solid 1px #ccc;
+    position: absolute;
+    left: -10000px;
+    top: 0;
+    opacity: 0;
+    padding:10px;
+    display:none;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+.keys{
+  position: absolute;
+  top:300px;
+}
+.card-hide {
+    left: -10000px !important;
+    opacity: 0 !important;
+    display:none !important;
+}
+.card-show {
+    left: 0 !important;
+    opacity: 1 !important;
+    display:block !important;
+}
+/* General
+==================================*/
+h1 {
+    color: #fff;
+    text-shadow: 0 1px 0px #000;
+    font-size: 42px;
+}
+
+
+/* Utilities
+==================================*/
+.title-bordered {
+    border-top: solid 2px #bbb;
+    padding-top: 30px;
+}
+
+p {
+    color: #555;
+    margin: 0 0 25px;
+}
+
+.scroll {
+    height: 100%;
+}
+
+
+/* Menu
+==================================*/
+.menu .bar.bar-header.expanded {
+    transition: all .5s ease-in-out;
+}
+
+.menu-open .bar.bar-header.expanded {
+    background-color: #222;
+}
+
+.menu h2 {
+    bottom: 0;
+    font-size: 18px;
+    left: 16px;
+    position: absolute;
+}
+
+.menu .avatar {
+    height: 88px;
+    width: 88px;
+}
+
+.menu.menu-left * {
+    font-weight: bold;
+}
+
+.menu-open .ion-navicon {
+    transform: rotate(-360deg);
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.menu-open .ion-navicon:before {
+    content: "\f2ca";
+}
+
+
+/* Login
+==================================*/
+.app-icon {
+    background-color: #fff;
+    background: url('../img/crown.png') center;
+    background-size: cover;
+    border-radius: 50%;
+    height: 125px;
+    margin: 0 auto;
+    width: 125px;
+}
+
+.social-login {
+    position: fixed;
+    bottom: 0;
+}
+
+timer > span {
+    font-size:16px;
+    font-weight: 700;
+    
+}
+timer > span.time {
+    background: rgba(0,0,0,0.6);
+    border-radius: 5px;
+    padding: 8px;
+    height:24px;
+    margin: 10px;
+    line-height:24px;
+    vertical-align: middle;
+    color: #ffffff;
+}
+.navigate {
+    width: 30px;
+    height:30px;
+    margin: 2px;
+    float:left;
+}
+.navigate .button{
+    margin-top: 10px;
+    height:26px;
+    padding: 0 2px;
+}
+.right_btn {
+    background:#33cd5f;
+    color: #ffffff;
+    
+}
+.wrong_btn {
+    background:#ef473a;
+    color: #ffffff;
+    
+}
+.right_btn:hover {
+     background:#009A2C;
+    color: #ffffff;
+}
+.wrong_btn:hover {
+    background: #BC1407;
+    color:#ffffff;
+}

@@ -1,0 +1,23 @@
+<ion-view title="Batches">
+    <ion-nav-bar>
+        <ion-nav-buttons side="right">
+        <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content>
+        <div class="">
+
+        <ion-list my-main-directive>
+          
+                <a class="item item-avatar item-icon-right" style="border-bottom:2px solid #eeeeee">
+                <span  style="float: left"><h3>Batch</h3></span>
+                </a>
+            <a  ng-repeat="batch in batches" href="#/users/{{batch.bid}}" my-repeat-directive>
+                <span  style="float: left"><h3>{{batch.batch_name}}</h3></span>
+            </a>
+        </ion-list>
+
+        
+        </div>
+    </ion-content>
+</ion-view>
