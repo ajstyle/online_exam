@@ -1,0 +1,23 @@
+<ion-view title="Quizs">
+    <ion-nav-bar>
+        <ion-nav-buttons side="right">
+        <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content>
+        <div class="">
+
+        <ion-list my-main-directive>
+          
+                <a class="item item-avatar item-icon-right" style="border-bottom:2px solid #eeeeee">
+                <span  style="float: left"><h3>Quiz</h3></span><span  style="float: right">Duration</span>
+                </a>
+            <a  ng-repeat="quiz in quizs" href="#/details/{{quiz.quid}}" my-repeat-directive>
+                <span  style="float: left"><h3>{{quiz.quiz_name}}</h3></span><span  style="float: right">{{ quiz.duration }} Minutes</span>
+            </a>
+        </ion-list>
+
+        
+        </div>
+    </ion-content>
+</ion-view>

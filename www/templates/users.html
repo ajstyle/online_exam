@@ -1,0 +1,22 @@
+<ion-view title="Users">
+    <ion-nav-bar>
+        <ion-nav-buttons side="right">
+        <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+        <ion-list>
+            <ion-item>
+                <a class="item-content">
+                <span  style="float: left"><h3>Users</h3></span>
+                </a>
+            </ion-item>
+            <ion-item ng-repeat="user in users">
+                <span  style="float: left"><h3>{{user.user_name}}</h3></span><span  style="float: right">{{ user.first_name }} {{ user.last_name }}</span>
+                <ion-option-button class="button-positive"
+                       ng-click="upload(user.id)">
+      Upload result
+    </ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
