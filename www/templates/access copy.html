@@ -1,5 +1,5 @@
 <ion-view title="">
-    <ion-nav-bar>
+    <ion-nav-bar class = "bar bar-header bar-royal">
         <ion-nav-buttons side="right">
         <button class="right button button-icon icon ion-android-cancel" ng-click="logout()">   </button>
         </ion-nav-buttons>
@@ -11,10 +11,10 @@
             <div >
                 {{ rid }}
             </div>
-            <div class="queses" 
+            <div class="queses"
             ng-class="{'card-hide': index  > $index + 1, 'card-show': index  == $index + 1}"
             ng-style="{'z-index': (queses.length - $index)}" ng-repeat="quiz in queses">
-              
+
                 <span  style="display:block;"><h4>Q ({{$index + 1}}): <span ng-bind-html="quiz.question"></span></h4></span>
                 <br/>
                 <div ng-repeat="opt in optionsd" ng-if="quiz.qid == opt.qid">
@@ -32,13 +32,13 @@
         </div>
         </div>
         <div class="row">
-           
+
             <div class="button-bar social-login">
             <button class="button button-small button-border icon-left ion-arrow-left-b button-positive-900" ng-hide="index == 1" ng-click="itemClicked(index-1)">Previous</button>
             <button class="button button-small button-border icon-right ion-arrow-right-b  button-calm-900" ng-hide="index == queses.length" ng-click="itemClicked(index+1)">Next</button>
             <button ng-click="formSubmit()" id="formSubmit" class="button button-small button-border icon-left ion-arrow-return-right button-assertive-900" ng-show="index == queses.length">Submit</button>
         </div>
-        </div> 
+        </div>
         </form>
     </ion-content>
 </ion-view>

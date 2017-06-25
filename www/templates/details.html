@@ -1,5 +1,5 @@
 <ion-view title="{{ title }}">
-    <ion-nav-bar>
+    <ion-nav-bar class="bar bar-header bar-calm"  align-title="left"  >
         <ion-nav-buttons side="left">
             {{ quiz.title }}
         </ion-nav-buttons>
@@ -31,7 +31,7 @@
                 </a>
               </div>
                 <div ng-if="status == 'FALSE'">
-              <a class="button button-block button-danger" >
+              <a class="button button-block button-assertive" >
                   Quiz Alredy Submitted
               </a>
               </div>

@@ -401,7 +401,7 @@
    *  ionicPlatform   PlatformProvider
    *  cordovaSQLite
    */
-  todoApp.controller("CategoriesLogin", function($scope, $ionicPlatform, $http, $cordovaSQLite, $location, Auth, md5) {
+  todoApp.controller("CategoriesLogin", function($scope, $ionicPlatform, $http, $cordovaSQLite, $location, Auth, md5, $ionicLoading,$ionicPopup) {
       // Container for the categories in this Scope.
       $scope.loginData = [];
       $ionicPlatform.ready(function() {
@@ -412,6 +412,10 @@
 
 
       $scope.doLogin = function(loginData) {
+          $ionicLoading.show({
+              template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Please Wait...</p>'
+              // noBackdrop: truecrescent
+          });
           $http.defaults.headers.post["Content-Type"] = "application/json";
           var data = {};
           data.username = loginData.username;
@@ -429,12 +433,21 @@
                               userid: response.data.id
                           });
                           $location.path("/quizs/" + response.data.id + "/" + response.data.bid);
+                          $ionicLoading.hide();
                       } else {
-                          alert("User name or password is wrong");
+                          $ionicPopup.alert({
+                              title: 'Error!',
+                              template: 'User name or password is wrong'
+                          });
+                          $ionicLoading.hide();
                       }
                   },
                   function(response) {
-                      alert("User name or password is wrong");
+                    $ionicPopup.alert({
+                        title: 'Error!',
+                        template: 'User name or password is wrong'
+                    });
+                      $ionicLoading.hide();
 
                       // failure callback
                   }
@@ -819,7 +832,7 @@
           }
       };
   });
-  todoApp.controller("QuizsController", function($scope, $ionicPlatform, $stateParams, $cordovaSQLite, $location, $timeout, md5, Auth, $http) {
+  todoApp.controller("QuizsController", function($scope, $ionicPlatform, $stateParams, $cordovaSQLite, $location, $timeout, md5, Auth, $http, $ionicLoading) {
       // Container for the categories in this Scope.
 
       $scope.quizs = [];
@@ -837,6 +850,10 @@
           .success(function(data, status, headers, config) {
               console.log(data);
               db.transaction(function(tx) {
+                $ionicLoading.show({
+                    template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Load Quiz ...</p>'
+                    // noBackdrop: truecrescent
+                });
                   // Drop Categories before import.
                   tx.executeSql("DROP TABLE IF EXISTS tblUsers");
                   tx.executeSql("DROP TABLE IF EXISTS tblQuiz");
@@ -992,7 +1009,7 @@
                                           $scope.status = "FALSE"
                                           console.log("status------", $scope.status);
                                       } else {
-                                        $scope.status = "TRUE"
+                                          $scope.status = "TRUE"
                                           angular.forEach(ques, function(value, key) {
                                               var rid = value.rid;
                                               var qid = value.qid;
@@ -1043,7 +1060,7 @@
                                               });
                                           });
                                       }
-
+                                   $ionicLoading.hide();
                                   });
 
                               //  $location.path('/login');
@@ -1460,15 +1477,18 @@
 
                       console.log("data--------------", data);
                       $http.post('http://exam.imbueaura.com/index.php/api/quiz_submit/format/json', data, config).then(function(success) {
-                          console.log(success);
+                        $ionicLoading.show({
+                            template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Please Wait ...</p>'
+                            // noBackdrop: truecrescent
+                        });
                           if (success.data == "TRUE") {
                               var querys = "INSERT INTO user_result (uid, quid,qids,category_name,qids_range,oids, start_time, end_time, last_response,time_spent, time_spent_ind, score, percentage, q_result, status, institute_id, photo, essay_ques, score_ind) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                               $cordovaSQLite.execute(db, querys, [_uid, _quid, _qids, _category_name, _qids_range, _oids, start_time, end_time, end_time, time_spent, time_spent_ind, score, percentage, q_result, status, institute_id, photo, essay_ques, score_ind]).then(function(res) {
                                   //  console.log(_qids);
                               }, function(err) {
                                   console.error(err);
-                              });
-
+                               });
+                                 $ionicLoading.hide();
                               $location.path("/thankyou");
                           } else {
                               $ionicPopup.alert({

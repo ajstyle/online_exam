@@ -1,5 +1,5 @@
 <ion-view title="Quizs">
-    <ion-nav-bar>
+        <ion-nav-bar class = "bar bar-header bar-balanced">
         <ion-nav-buttons side="right">
         <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
         </ion-nav-buttons>
@@ -10,11 +10,13 @@
         <ion-list my-main-directive>
 
                 <a class="item item-avatar item-icon-right" style="border-bottom:2px solid #eeeeee">
-                <span  style="float: left"><h3>Quiz</h3></span><span  style="float: right">Duration</span>
+                <span  style="float: left "><h2><b>Quiz</h2></b></h2></span>
+
+                <span style="float: right"><h2><b>Duration</b></h2></span>
                 </a>
-            
+
             <a  ng-repeat="quiz in quizs" href="#/details/{{quiz.quid}}/{{status}}" my-repeat-directive>
-                <span  style="float: left"><h3>{{quiz.quiz_name}}</h3></span><span  style="float: right">{{ quiz.duration }} Minutes</span>
+                <span  style="float: left"><h4>{{quiz.quiz_name}}</h4></span><span  style="float: right"><h4>{{ quiz.duration }} <b>Minutes</b></h4></span>
             </a>
         </ion-list>
 
