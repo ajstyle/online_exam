@@ -8,16 +8,17 @@
         <div class="">
 
         <ion-list my-main-directive>
-          
+
                 <a class="item item-avatar item-icon-right" style="border-bottom:2px solid #eeeeee">
                 <span  style="float: left"><h3>Quiz</h3></span><span  style="float: right">Duration</span>
                 </a>
-            <a  ng-repeat="quiz in quizs" href="#/details/{{quiz.quid}}" my-repeat-directive>
+            
+            <a  ng-repeat="quiz in quizs" href="#/details/{{quiz.quid}}/{{status}}" my-repeat-directive>
                 <span  style="float: left"><h3>{{quiz.quiz_name}}</h3></span><span  style="float: right">{{ quiz.duration }} Minutes</span>
             </a>
         </ion-list>
 
-        
+
         </div>
     </ion-content>
 </ion-view>
