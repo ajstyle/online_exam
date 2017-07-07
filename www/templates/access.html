@@ -6,8 +6,24 @@
     </ion-nav-bar>
     <ion-content>
         <form ng-submit="submit()">
+         <div class = "row">
+           <div class="col-75">
+            <span class="ssc_name ssc_name1">SSC : CGL</span>
+            <span class="ssc_name ssc_name2">NAME : AMIT KUMAR JAIN</span>
+            <span class="ssc_name ssc_name3">ENROLLMENT NO. : 123456789</span>
+                <span class="ssc_name ssc_name4">DATE : 10 July 2017</span>
+
+           </div>
+          <div class="col-25 time">
+              <h4></h4>
+              <timer interval="1000" ng-repeat="n in duration" ng-class="{'card-hi': n.time  == 7000}" countdown="n.time"><span class="time">Time Left : {{hours}}:{{minutes}}:{{seconds}}</span>
+              </timer>
+             <br/>
+
+          </div>
+</div>
         <div class="row">
-        <div class="col-75" style="position:relative">
+        <div class="col-75 question_label" style="position:relative">
             <div >
                 {{ rid }}
             </div>
@@ -17,19 +33,18 @@
 
                 <span  style="display:block;"><h4>Q ({{$index + 1}}): <span ng-bind-html="quiz.question"></span></h4></span>
                 <br/>
-                <div ng-repeat="opt in optionsd[quiz.qid]" ng-if="quiz.qid == opt.qid">
+                <div class="question_label" ng-repeat="opt in optionsd[quiz.qid]" ng-if="quiz.qid == opt.qid">
                  <ion-radio ng-show="{{quiz.qid}} == {{opt.qid}}" ng-model="selected[opt.qid]" name="opt_{{opt.qid}}" value="{{opt.oid}}" ng-change="ChangE(opt.qid)"><strong>({{ options_nos[opt.option_num] }})</strong> {{opt.opti}}</ion-radio>
                 </div>
             </div>
         </div>
-        <div class="col-25">
-            <h4>Time Remaning</h4>
-            <timer interval="1000" ng-repeat="n in duration" ng-class="{'card-hi': n.time  == 7000}" countdown="n.time"><span class="time">{{hours}}</span>:<span class="time">{{minutes}}</span>:<span class="time">{{seconds}}</span>
-            </timer>
-           <br/>
-            <h4>Go to Question</h4>
-            <div ng-repeat="q in queses_i" class="navigate"><button id="ques_{{ q.qid}}" ng-hide="!queses[$index+1].qid" class="button button-small"  ng-click="itemClicked($index+1, queses_i[$index-1].qid)">{{$index+1 }}</button> </div>
+        <div class = "col-25 ">
+          <div class="question">
+          <h4>Go to Question</h4>
+
+          <div ng-repeat="q in queses_i" class="navigate"><button id="ques_{{ q.qid}}" ng-hide="!queses[$index+1].qid" class="button button-small"  ng-click="itemClicked($index+1, queses_i[$index-1].qid)">{{$index+1 }}</button> </div>
         </div>
+  </div>
         </div>
         <div class="row">
 

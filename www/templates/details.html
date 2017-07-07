@@ -1,40 +1,91 @@
 <ion-view title="{{ title }}">
-    <ion-nav-bar class="bar bar-header bar-calm"  align-title="left"  >
+    <ion-nav-bar class="bar bar-header bar-calm" align-title="left">
         <ion-nav-buttons side="left">
             {{ quiz.title }}
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-        <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
+            <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content>
 
         <ion-list ng-repeat="quiz in quizs">
             <ion-item style="border:1px solid #ddd;">
-
-                <span  style="float: left"><h3>Name of Exam</h3></span><span  style="float: right">{{quiz.quiz_name}}</span>
+                <div class="row">
+                    <div class="col-33 quiz_heading">
+                        <h3>Name of Exam:</h3>
+                    </div>
+                    <div class="col-66">
+                        <span class="quality">{{quiz.quiz_name}}</span>
+                    </div>
+                </div>
             </ion-item>
             <ion-item style="border:1px solid #ddd;">
-                <span  style="float: left"><h3>Duration</h3></span><span  style="float: right">{{ quiz.duration }} Minutes</span></ion-item>
+                <div class="row">
+                    <div class="col-33 quiz_heading">
+                        <h3>Duration</h3>
+                    </div>
+                    <div class="col-66">
+                        <span>{{ quiz.duration }} Minutes</span>
+                    </div>
+                </div>
+            </ion-item>
             <ion-item style="border:1px solid #ddd;">
-                <span  style="float: left"><h3>Description</h3></span><span  style="float: right"><p ng-bind-html="quiz.description"></p> </span></ion-item>
+                <div class="row">
+                    <div class="col-33 quiz_heading">
+                        <h3>Description</h3>
+                    </div>
+                    <div class="col-66">
+                        <span><p ng-bind-html="quiz.description"></p></span>
+                    </div>
+                </div>
+            </ion-item>
+
             <ion-item style="border:1px solid #ddd;">
-                <span  style="float: left"><h3>Passing Percentage</h3></span><span  style="float: right">{{ quiz.pass_percentage }}% </span></ion-item>
+                <div class="row">
+                    <div class="col-33 quiz_heading">
+                        <h3>Passing Percentage</h3>
+                    </div>
+                    <div class="col-66">
+                        <span>{{ quiz.pass_percentage }}%</span>
+                    </div>
+                </div>
+            </ion-item>
+
+
             <ion-item style="border:1px solid #ddd;">
-                <span  style="float: left"><h3>Start Time</h3></span><span  style="float: right">{{ quiz.start_time * 1000 | date:'dd MMMM yyyy HH:mm:ss' }} </span></ion-item>
+                <div class="row">
+                    <div class="col-33 quiz_heading">
+                        <h3>Start Time</h3>
+                    </div>
+                    <div class="col-66">
+                        <span>{{ quiz.start_time * 1000 | date:'dd MMMM yyyy HH:mm:ss' }}</span>
+                    </div>
+                </div>
+            </ion-item>
+
+
             <ion-item style="border:1px solid #ddd;">
-                <span  style="float: left"><h3>End Time</h3></span><span  style="float: right">{{ quiz.end_time * 1000 | date:'dd MMMM yyyy HH:mm:ss' }}<br/>{{ quiz.today_time }} </span></ion-item>
-                <br/>
-                  <div ng-if="status == 'TRUE'">
-                <a class="button button-block button-positive" ng-href="#/access/{{quiz.quid}}" href="#/lists/16">
+                <div class="row">
+                    <div class="col-33 quiz_heading">
+                        <h3>End Time</h3>
+                    </div>
+                    <div class="col-66">
+                        <span>{{ quiz.end_time * 1000 | date:'dd MMMM yyyy HH:mm:ss' }}<br/>{{ quiz.today_time }}</span>
+                    </div>
+                </div>
+            </ion-item>
+
+            <div ng-if="status == 'TRUE'">
+                <a class="button button-block button-positive start_quiz" ng-href="#/access/{{quiz.quid}}" href="#/lists/16">
                 Start Quiz
                 </a>
-              </div>
-                <div ng-if="status == 'FALSE'">
-              <a class="button button-block button-assertive" >
+            </div>
+            <div ng-if="status == 'FALSE'">
+                <a class="button button-block button-assertive start_quiz">
                   Quiz Alredy Submitted
               </a>
-              </div>
+            </div>
         </ion-list>
     </ion-content>
 </ion-view>

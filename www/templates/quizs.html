@@ -4,23 +4,34 @@
         <button class="right button button-icon icon ion-android-cancel" ng-click="logout()"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content>
-        <div class="">
+    <ion-content my-main-directive>
+ <div class = "container">
+                <a class="item item-avatar item-icon-right quiz_item" style="border-bottom:2px solid #eeeeee">
+                  <div class = "row">
+        <div class = "col-75 quiz_heading">
 
-        <ion-list my-main-directive>
+                <span><h2><b>Quiz</h2></b></h2></span>
+         </div>
+           <div class = "col-25">
 
-                <a class="item item-avatar item-icon-right" style="border-bottom:2px solid #eeeeee">
-                <span  style="float: left "><h2><b>Quiz</h2></b></h2></span>
+                <span><h2><b>Duration</b></h2></span>
 
-                <span style="float: right"><h2><b>Duration</b></h2></span>
+            </div>
+          </div>
+
                 </a>
+</div>
+            <a  class="item item-avatar item-icon-right" ng-repeat="quiz in quizs" href="#/details/{{quiz.quid}}/{{status}}" my-repeat-directive>
+              <div class = "row">
+                <div class = "col-75 quiz_heading">
 
-            <a  ng-repeat="quiz in quizs" href="#/details/{{quiz.quid}}/{{status}}" my-repeat-directive>
-                <span  style="float: left"><h4>{{quiz.quiz_name}}</h4></span><span  style="float: right"><h4>{{ quiz.duration }} <b>Minutes</b></h4></span>
+                <h4><span class = "quiz">{{quiz.quiz_name}}</span></h4>
+              </div>
+                <div class = "col-25">
+                <span><h4>{{ quiz.duration }} <b>Minutes</b></h4></span>
+              </div>
+            </div>
             </a>
-        </ion-list>
-
-
-        </div>
+          </div>
     </ion-content>
 </ion-view>

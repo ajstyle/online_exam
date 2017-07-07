@@ -818,7 +818,8 @@
   todoApp.directive('myMainDirective', function() {
       return function(scope, element, attrs) {
 
-          angular.element(element).addClass('list animate-fade-slide-in-right');
+          //angular.element(element).addClass('list animate-fade-slide-in-right');
+        angular.element(element).addClass('');
       };
   });
   todoApp.directive('myRepeatDirective', function(ionicMaterialMotion, ionicMaterialInk) {
