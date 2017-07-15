@@ -44,12 +44,113 @@
       });
   });
 
-  todoApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+  todoApp.controller('AppCtrl', ['$scope', '$ionicModal', '$ionicPopover', '$timeout', '$location', function($scope, $ionicModal, $ionicPopover, $timeout, $location) {
+      // Form data for the login modal
+
+      $scope.loginData = {};
+      $scope.isExpanded = false;
+      $scope.hasHeaderFabLeft = false;
+      $scope.hasHeaderFabRight = false;
+      $scope.enable = false;
+
+      var navIcons = document.getElementsByClassName('ion-navicon');
+      for (var i = 0; i < navIcons.length; i++) {
+          navIcons.addEventListener('click', function() {
+              this.classList.toggle('active');
+          });
+      }
+      ////////////////////////////////////////
+      // Layout Methods
+      ////////////////////////////////////////
+
+      $scope.hideNavBar = function() {
+          document.getElementsByTagName('ion-nav-bar')[0].style.display = 'none';
+      };
+
+      $scope.showNavBar = function() {
+          document.getElementsByTagName('ion-nav-bar')[0].style.display = 'block';
+      };
+
+      $scope.noHeader = function() {
+          var content = document.getElementsByTagName('ion-content');
+          for (var i = 0; i < content.length; i++) {
+              if (content[i].classList.contains('has-header')) {
+                  content[i].classList.toggle('has-header');
+              }
+          }
+      };
+      $scope.setExpanded = function(bool) {
+          $scope.isExpanded = bool;
+      };
+      $scope.setHeaderFab = function(location) {
+          var hasHeaderFabLeft = false;
+          var hasHeaderFabRight = false;
+
+          switch (location) {
+              case 'left':
+                  hasHeaderFabLeft = true;
+                  break;
+              case 'right':
+                  hasHeaderFabRight = true;
+                  break;
+          }
+
+          $scope.hasHeaderFabLeft = hasHeaderFabLeft;
+          $scope.hasHeaderFabRight = hasHeaderFabRight;
+      };
+
+      $scope.hasHeader = function() {
+          var content = document.getElementsByTagName('ion-content');
+          for (var i = 0; i < content.length; i++) {
+              if (!content[i].classList.contains('has-header')) {
+                  content[i].classList.toggle('has-header');
+              }
+          }
+
+      };
+
+
+      $scope.hideHeader = function() {
+          $scope.hideNavBar();
+          $scope.noHeader();
+      };
+
+      $scope.showHeader = function() {
+          $scope.showNavBar();
+          $scope.hasHeader();
+      };
+
+
+      $scope.clearFabs = function() {
+          $scope.number = '';
+      }
+
+      if ($location.$$path == "/app1/gallery") {
+          $scope.hide = "false"
+      } else {
+          $scope.hide = "true"
+      }
+  }])
+
+
+
+
+
+
+
+  todoApp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider) {
       $httpProvider.defaults.useXDomain = true;
       $httpProvider.defaults.headers.common = 'Content-Type: application/json';
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
-
+      $ionicConfigProvider.form.checkbox('square');
+      $ionicConfigProvider.form.toggle('small')
       $stateProvider
+          .state('app', {
+              url: '/app',
+              abstract: true,
+              templateUrl: 'templates/menu.html',
+              controller: 'AppCtrl'
+          })
           .state("config", {
               url: "/config",
               templateUrl: "templates/config.html",
@@ -117,8 +218,79 @@
               url: "/items/:listId",
               templateUrl: "templates/items.html",
               controller: "ItemsController",
-          });
+          })
+          .state('app.accessorDashboard', {
+              url: '/accessorDashboard',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/accessorDashboard.html',
+                      controller: 'accessorController'
+                  },
 
+              }
+          })
+          .state('app.pendingAssessmant', {
+              url: '/pendingAssessmant',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/pendingAssessment.html',
+                      controller: 'pendingAssessmantCtrl'
+                  },
+
+              }
+          })
+          .state('app.attemptAssessmant', {
+              url: '/attemptAssessmant',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/attemptAssessment.html',
+                      //controller: 'attemptAssessmantCtrl'
+                  },
+
+              }
+          })
+          .state('app.completeAssessment', {
+              url: '/completeAssessmant',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/completeAssessment.html',
+                      //controller: 'attemptAssessmantCtrl'
+                  },
+
+              }
+          })
+          .state('app.studentPassword', {
+              url: '/studentPassword',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/studentPassword.html',
+                      //controller: 'studentPasswordCtrl'
+                  },
+
+              }
+          })
+
+          .state('app.viewAttempt', {
+              url: '/viewAttempt',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/viewAttempt.html',
+                      //controller: 'studentPasswordCtrl'
+                  },
+
+              }
+          })
+
+          .state('app.instruction', {
+              url: '/instruction',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/instruction.html',
+                    //  controller: 'instructionCtrl'
+                  },
+
+              }
+          })
       // Set Default to /config.
       $urlRouterProvider.otherwise("/config");
   });
@@ -164,231 +336,6 @@
           $ionicLoading.show({
               template: "Loading..."
           });
-          //   // Load SQLite on Device, use WebSQL in Browser.
-          //
-
-          //       $http.get('http://exam.imbueaura.com/index.php/api/users/format/json')
-          //       .success(function(data,status,headers,config){
-          //
-          //           db.transaction(function(tx) {
-          //       // Drop Categories before import.
-          //         tx.executeSql("DROP TABLE IF EXISTS tblUsers");
-          //         tx.executeSql("DROP TABLE IF EXISTS tblQuiz");
-          //         tx.executeSql("DROP TABLE IF EXISTS Questions");
-          //         tx.executeSql("DROP TABLE IF EXISTS total_result");
-          //         tx.executeSql("DROP TABLE IF EXISTS tblOptions");
-          //         tx.executeSql("DROP TABLE IF EXISTS assessor");
-          //         tx.executeSql("DROP TABLE IF EXISTS batches");
-          //         tx.executeSql("DROP TABLE IF EXISTS assessor_batch");
-          //       tx.executeSql("CREATE TABLE IF NOT EXISTS tblUsers (id integer, username text,password text,email text,first_name text,last_name text,gid integer,bid integer)");
-          //
-          //       tx.executeSql("CREATE TABLE IF NOT EXISTS tblQuiz"+
-          //              "(id integer primary key,quid INTEGER,quiz_name TEXT,description TEXT,"+
-          //              "start_time NUMERIC,end_time NUMERIC,duration NUMERIC,"+
-          //              "pass_percentage INTEGER,max_attempts NUMERIC,"+
-          //              "correct_score TEXT,incorrect_score TEXT,"+
-          //                     "bid INTEGER,gid INTEGER)");
-          //     });
-          //    db.transaction(function(tx) {
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS Questions (id integer primary key,"+
-          //                     "rid INTEGER, quid INTEGER,qid INTEGER,question TEXT)");
-          //       tx.executeSql("CREATE TABLE IF NOT EXISTS tblOptions (id integer primary key, qid INTEGER, oid INTEGER, option TEXT, option_score NUMERIC,quid NUMERIC )");
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS quiz_result (id integer primary key, uid INTEGER, quid INTEGER, qids TEXT, category_name TEXT,qids_range TEXT, oids TEXT, start_time INTEGER, end_time INTEGER, last_response INTEGER, time_spent INTEGER, time_spent_ind TEXT, score TEXT, percentage TEXT, q_result INTEGER, status INTEGER, institute_id INTEGER, photo TEXT, essay_ques INTEGER, score_ind TEXT )");
-          //    });
-          //    db.transaction(function(tx) {
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS assessor (id integer primary key,"+
-          //                     "aid INTEGER,qpid INTEGER,firstname TEXT,lastname TEXT,username TEXT,password TEXT)");
-          //       tx.executeSql("CREATE TABLE IF NOT EXISTS assessor_batch (id integer primary key, aid INTEGER, bid INTEGER )");
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS user_result (id integer primary key, uid INTEGER, quid INTEGER,qids TEXT,category_name TEXT,"+
-          //                      "qids_range TEXT,oids TEXT, start_time TEXT,end_time TEXT, last_response TEXT,"+
-          //                     "time_spent TEXT, time_spent_ind TEXT, score REAL, percentage TEXT," +
-          //                     "q_result INTEGER, status INTEGER, institute_id INTEGER, photo TEXT, essay_ques INTEGER, score_ind INTEGER)");
-          //    });
-          //    db.transaction(function(tx) {
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS total_result (id integer primary key,"+
-          //                     "rid INTEGER, uid INTEGER, quid INTEGER,qids TEXT,category_name TEXT,"+
-          //                      "qids_range TEXT,oids TEXT, start_time TEXT,end_time TEXT, last_response TEXT,"+
-          //                     "time_spent TEXT, time_spent_ind TEXT, score REAL, percentage TEXT," +
-          //                     "q_result INTEGER, status INTEGER, institute_id INTEGER, photo TEXT, essay_ques INTEGER, score_ind INTEGER)");
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS batches (id integer primary key, bid INTEGER, batch_name TEXT )");
-          //        tx.executeSql("CREATE TABLE IF NOT EXISTS tab_manager (id integer primary key, tm_name TEXT, tm_password TEXT )");
-          //
-          //    });
-          //     var user = data;
-          //           for(i = 0; i<user.length; i++){
-          //             var id = user[i].id;
-          //             var username = user[i].username;
-          //             var password = user[i].password;
-          //             var email = user[i].email;
-          //             var first_name = user[i].first_name;
-          //             var last_name = user[i].last_name;
-          //             var gid = user[i].gid;
-          //             var bid = user[i].bid;
-          //
-          //             var query = "INSERT INTO tblUsers (id,username,password,email,first_name,last_name,gid,bid) VALUES (?,?,?,?,?,?,?,?)";
-          //             $cordovaSQLite.execute(db, query, [id,username,password,email,first_name,last_name,gid,bid]).then(function(res) {
-          //
-          //             }, function (err) {
-          //               console.error(err);
-          //             });
-          //                }
-          //
-          //           $http.get('http://exam.imbueaura.com/index.php/api/assessor/format/json')
-          //       .success(function(data,status,headers,config){
-          //               var assessor = data;
-          //           for(i = 0; i<assessor.length; i++){
-          //             var id = assessor[i].aid;
-          //             var username = assessor[i].username;
-          //             var password = assessor[i].password;
-          //             var first_name = assessor[i].firstname;
-          //             var last_name = assessor[i].lastname;
-          //             var qpid = assessor[i].qpid;
-          //               var query = "INSERT INTO assessor (aid,username,password,firstname,lastname,qpid) VALUES (?,?,?,?,?,?)";
-          //             $cordovaSQLite.execute(db, query, [id,username,password,first_name,last_name,qpid]).then(function(res) {
-          //
-          //             }, function (err) {
-          //               console.error(err);
-          //             });
-          //                }
-          //           });
-          //           $http.get('http://exam.imbueaura.com/index.php/api/batches/format/json')
-          //       .success(function(data,status,headers,config){
-          //               var batch = data;
-          //           for(i = 0; i<batch.length; i++){
-          //             var batch_name = batch[i].batch_name;
-          //             var bid = batch[i].bid;
-          //               var query = "INSERT INTO batches (bid,batch_name) VALUES (?,?)";
-          //             $cordovaSQLite.execute(db, query, [bid,batch_name]).then(function(res) {
-          //
-          //             }, function (err) {
-          //               console.error(err);
-          //             });
-          //                }
-          //           });
-          //
-          //
-          //           $http.get('http://exam.imbueaura.com/index.php/api/assessorbatch/format/json')
-          //       .success(function(data,status,headers,config){
-          //               var assessor = data;
-          //           for(i = 0; i<assessor.length; i++){
-          //             var aid = assessor[i].aid;
-          //             var bid = assessor[i].bid;
-          //               var query = "INSERT INTO assessor_batch (aid,bid) VALUES (?,?)";
-          //             $cordovaSQLite.execute(db, query, [aid,bid]).then(function(res) {
-          //
-          //             }, function (err) {
-          //               console.error(err);
-          //             });
-          //                }
-          //           });
-          //
-          //            $http.get('http://exam.imbueaura.com/index.php/api/tabs/format/json')
-          //       .success(function(data,status,headers,config){
-          //               var tab = data;
-          //           for(i = 0; i<tab.length; i++){
-          //             var password_tm = tab[i].tm_password;
-          //             var name_tm = tab[i].tm_name;
-          //               var query = "INSERT INTO tab_manager (tm_password,tm_name) VALUES (?,?)";
-          //             $cordovaSQLite.execute(db, query, [password_tm,name_tm]).then(function(res) {
-          //
-          //             }, function (err) {
-          //               console.error(err);
-          //             });
-          //                }
-          //           });
-          //
-          //           $http.get('http://exam.imbueaura.com/index.php/api/quiz/format/json')
-          //       .success(function(data,status,headers,config){
-          //           var quiz = data;
-          //           angular.forEach(quiz, function(values, keys) {
-          //             var quid = values.quid;
-          //             var quiz_name = values.quiz_name;
-          //             var description = values.description;
-          //             var start_time = values.start_time;
-          //             var end_time = values.end_time;
-          //             var duration = values.duration;
-          //             var pass_percentage = values.pass_percentage;
-          //             var max_attempts = values.max_attempts;
-          //             var correct_score = values.correct_score;
-          //             var incorrect_score = values.incorrect_score;
-          //             var gid = values.gid;
-          //             var bid = values.bid;
-          //
-          //             var query = "INSERT INTO tblQuiz (quid,quiz_name,description,start_time,end_time,duration,pass_percentage,max_attempts,correct_score,incorrect_score,bid,gid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-          //             $cordovaSQLite.execute(db, query, [quid,quiz_name,description,start_time,end_time,duration,pass_percentage,max_attempts,correct_score,incorrect_score,bid,gid]).then(function(res) {
-          //                        $http.get('http://exam.imbueaura.com/index.php/api/printquiz/qid/'+quid+'/format/json')
-          //       .success(function(data,status,headers,config){
-          //
-          //
-          //                   var ques = data;
-          //                   angular.forEach(ques, function(value, key) {
-          //                     var rid = value.rid;
-          //                      var qid = value.qid;
-          //                      var question = value.question;
-          //                      var qtid = value.quid;
-          //                     var query = "INSERT INTO Questions(rid,qid,quid,question) VALUES (?,?,?,?)";
-          //                     $cordovaSQLite.execute(db, query,[rid,qid,qtid,question]).then(function(res) {
-          //                       $http.get('http://exam.imbueaura.com/index.php/api/printresult/rid/'+rid+'/format/json')
-          //       .success(function(data,status,headers,config){
-          //                                var result_q = data;
-          //                                angular.forEach(result_q, function(values, keys) {
-          //                               var rid = values.rid;
-          //                               var uid = values.uid;
-          //                               var quid = values.quid;
-          //                               var qids = values.qids;
-          //                                var category_name = values.category_name;
-          //                                 var qids_range = values.qids_range;
-          //                               var oids = values.oids;
-          //                               var start_time = values.start_time;
-          //                               var end_time = values.end_time;
-          //                               var last_response = values.last_response;
-          //                                 var time_spent = values.time_spent;
-          //                               var time_spent_ind = values.time_spent_ind;
-          //                               var score = values.score;
-          //                               var percentage = values.percentage;
-          //                               var q_result = values.q_result;
-          //                                 var status = values.status;
-          //                               var institute_id = values.institute_id;
-          //                               var photo = values.photo;
-          //                               var essay_ques = values.score_ind;
-          //                               var score_ind = values.score_ind;
-          //                               var query = "INSERT INTO total_result(rid, uid, quid,qids,category_name,qids_range,oids, start_time, end_time, last_response,time_spent, time_spent_ind, score, percentage, q_result, status, institute_id, photo, essay_ques, score_ind) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-          //                              $cordovaSQLite.execute(db, query,[rid, uid, quid,qids,category_name,qids_range,oids, start_time, end_time, last_response,time_spent, time_spent_ind, score, percentage, q_result, status, institute_id, photo, essay_ques, score_ind]).then(function(res) {
-          //                             }, function (err) {
-          //                               console.error(err);
-          //                          });
-          //                            });
-          //                            });
-          //                       }, function (err) {
-          //                      console.error(err);
-          //                   });
-          //                     angular.forEach(value.options, function(val, ke) {
-          //                        var query = "INSERT INTO tblOptions(qid,oid,option,option_score,quid) VALUES (?,?,?,?,?)";
-          //                     $cordovaSQLite.execute(db, query,[qid,val.oid,val.option,val.option_score,qtid]).then(function(res) {
-          //
-          //
-          //                       }, function (err) {
-          //                      console.error(err);
-          //                   });
-          //                     });
-          //                   });
-          //                 });
-          //
-          //                $location.path('/login');
-          //             }, function (err) {
-          //               console.error(err);
-          //             });
-          //
-          //             });
-          //           });
-          //
-          //           $location.path("/login");
-          //         })
-          //         .error(function(data,status,headers,config){
-          //           $location.path("/login");
-          //         });
-          //
-          console.log("AMit----------------------");
           $location.path("/login");
           $ionicLoading.hide();
       });
@@ -401,7 +348,7 @@
    *  ionicPlatform   PlatformProvider
    *  cordovaSQLite
    */
-  todoApp.controller("CategoriesLogin", function($scope, $ionicPlatform, $http, $cordovaSQLite, $location, Auth, md5, $ionicLoading,$ionicPopup) {
+  todoApp.controller("CategoriesLogin", function($scope, $ionicPlatform, $http, $cordovaSQLite, $location, Auth, md5, $ionicLoading, $ionicPopup) {
       // Container for the categories in this Scope.
       $scope.loginData = [];
       $ionicPlatform.ready(function() {
@@ -443,77 +390,16 @@
                       }
                   },
                   function(response) {
-                    $ionicPopup.alert({
-                        title: 'Error!',
-                        template: 'User name or password is wrong'
-                    });
+                      $ionicPopup.alert({
+                          title: 'Error!',
+                          template: 'User name or password is wrong'
+                      });
                       $ionicLoading.hide();
 
                       // failure callback
                   }
               );
-          //  //
-          // //  var query = "SELECT * FROM tblUsers WHERE username = ? and password = ?";
-          // //  var query1 = "SELECT * FROM assessor WHERE username = ? and password = ?";
-          // //       var query2 = "SELECT * FROM tab_manager WHERE tm_name = ? and tm_password = ?";
-          //    $scope.pass = $scope.loginData.password;
-          //       $scope.user = md5.createHash($scope.loginData.password || '');
-          //   $cordovaSQLite.execute(db, query, [$scope.loginData.username, $scope.user]).then(function(result) {
-          //     if(result.rows.length > 0) {
-          //         for(var i=0; i<result.rows.length;i++) {
-          //         Auth.setUser({
-          //          username: result.rows.item(0).username,
-          //             userid: result.rows.item(0).id
-          //        });
-          //       $location.path("/quizs/" + result.rows.item(0).bid);
-          //         }
-          //     } else {
-          //         // assessor login
-          //         $cordovaSQLite.execute(db, query1, [$scope.loginData.username, $scope.user]).then(function(res) {
-          //     if(res.rows.length > 0) {
-          //         for(var i=0; i<res.rows.length;i++) {
-          //         Auth.setUser({
-          //          username: res.rows.item(0).username
-          //        });
-          //             $cordovaSQLite.execute(db, "SELECT * FROM assessor_batch WHERE aid =?", [res.rows.item(0).aid]).then(function(re) {
-          //             if(res.rows.length > 0) {
-          //                for(var i=0; i<res.rows.length;i++) {
-          //                 $location.path("/batch/" + re.rows.item(i).aid);
-          //                }
-          //              }
-          //
-          //             });
-          //
-          //         }
-          //     } else {
-          //        //
-          //         $cordovaSQLite.execute(db, query2, [$scope.loginData.username, $scope.user]).then(function(rest){
-          //             if(rest.rows.length > 0) {
-          //         for(var i=0; i<rest.rows.length;i++) {
-          //         Auth.setUser({
-          //          username: rest.rows.item(0).tm_name,
-          //             userid: rest.rows.item(0).id
-          //        });
-          //       $location.path("/tabmanager");
-          //         }
-          //     } else {
-          //         alert("User name or password is wrong");
-          //     }
-          //         }, function(error) {
-          //     console.error(error);
-          //       alert("User name or password is wrong");
-          //   });
-          //     }
-          //   }, function(error) {
-          //     console.error(error);
-          //       alert("User name or password is wrong");
-          //   });
-          //         //assessor login
-          //     }
-          //   }, function(error) {
-          //     console.error(error);
-          //       alert("User name or password is wrong");
-          //   });
+
       };
 
   });
@@ -848,12 +734,12 @@
 
       $http.get('http://exam.imbueaura.com/index.php/api/users/uid/' + uid + '/format/json')
           .success(function(data, status, headers, config) {
-              console.log(data);
+
               db.transaction(function(tx) {
-                $ionicLoading.show({
-                    template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Load Quiz ...</p>'
-                    // noBackdrop: truecrescent
-                });
+                  $ionicLoading.show({
+                      template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Load Quiz ...</p>'
+                      // noBackdrop: truecrescent
+                  });
                   // Drop Categories before import.
                   tx.executeSql("DROP TABLE IF EXISTS tblUsers");
                   tx.executeSql("DROP TABLE IF EXISTS tblQuiz");
@@ -863,7 +749,7 @@
                   tx.executeSql("DROP TABLE IF EXISTS assessor");
                   tx.executeSql("DROP TABLE IF EXISTS batches");
                   tx.executeSql("DROP TABLE IF EXISTS assessor_batch");
-                  tx.executeSql("CREATE TABLE IF NOT EXISTS tblUsers (id integer, username text,password text,email text,first_name text,last_name text,gid integer,bid integer)");
+                  tx.executeSql("CREATE TABLE IF NOT EXISTS tblUsers (id integer, username text,password text,email text,first_name text,last_name text,gid integer,bid integer,fname text,lname text,group_name text,en_number integer)");
 
                   tx.executeSql("CREATE TABLE IF NOT EXISTS tblQuiz" +
                       "(id integer primary key,quid INTEGER,quiz_name TEXT,description TEXT," +
@@ -898,6 +784,7 @@
 
               });
               var user = data;
+              console.log("user--------------------",user);
               for (i = 0; i < user.length; i++) {
                   var id = user[i].id;
                   var username = user[i].username;
@@ -907,9 +794,13 @@
                   var last_name = user[i].last_name;
                   var gid = user[i].gid;
                   var bid = user[i].bid;
+                  var fname = user[i].first_name ;
+                  var lname = user[i].last_name ;
+                  var group_name = user[i].group_name ;
+                  var en_number = user[i].en_number ;
 
-                  var query = "INSERT INTO tblUsers (id,username,password,email,first_name,last_name,gid,bid) VALUES (?,?,?,?,?,?,?,?)";
-                  $cordovaSQLite.execute(db, query, [id, username, password, email, first_name, last_name, gid, bid]).then(function(res) {
+                  var query = "INSERT INTO tblUsers (id,username,password,email,first_name,last_name,gid,bid,fname,lname,group_name,en_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                  $cordovaSQLite.execute(db, query, [id, username, password, email, first_name, last_name, gid, bid,fname,lname,group_name,en_number]).then(function(res) {
 
                   }, function(err) {
                       console.error(err);
@@ -1060,7 +951,7 @@
                                               });
                                           });
                                       }
-                                   $ionicLoading.hide();
+                                      $ionicLoading.hide();
                                   });
 
                               //  $location.path('/login');
@@ -1196,13 +1087,29 @@
       // $scope.queses = [];
       $scope.optionsd = [];
       $scope.options_nos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+    var userid = Auth.getUser().userid ;
+   console.log("--------------------------,",userid);
+   var queryGetUser = "SELECT DISTINCT first_name , last_name , group_name , en_number FROM tblUsers WHERE id = ?";
+
+    $cordovaSQLite.execute(db, queryGetUser, [userid]).then(function(result) {
+      $scope.name = result.rows[0].first_name + ' ' + result.rows[0].last_name ;
+      $scope.group_name = result.rows[0].group_name ;
+      $scope.date = new Date() ;
+      $scope.en_number = result.rows[0].en_number ;
+    });
+
+
+
+
+
       var query = "SELECT DISTINCT qid FROM Questions WHERE quid = ?";
       $cordovaSQLite.execute(db, query, [$stateParams.quizId]).then(function(result) {
           $ionicLoading.show({
               template: "Loading..."
           });
           if (result.rows.length > 0) {
-
+    $scope.totalQuestion = result.rows.length ;
               for (var i = 0; i < result.rows.length; i++) {
                   $scope.queses_i.push({
                       qid: result.rows.item(i).qid
@@ -1212,6 +1119,8 @@
 
 
               } // main for
+
+
           } else {
               $scope.queses.push({
                   qid: "no data"
@@ -1477,18 +1386,18 @@
 
                       console.log("data--------------", data);
                       $http.post('http://exam.imbueaura.com/index.php/api/quiz_submit/format/json', data, config).then(function(success) {
-                        $ionicLoading.show({
-                            template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Please Wait ...</p>'
-                            // noBackdrop: truecrescent
-                        });
+                          $ionicLoading.show({
+                              template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Please Wait ...</p>'
+                              // noBackdrop: truecrescent
+                          });
                           if (success.data == "TRUE") {
                               var querys = "INSERT INTO user_result (uid, quid,qids,category_name,qids_range,oids, start_time, end_time, last_response,time_spent, time_spent_ind, score, percentage, q_result, status, institute_id, photo, essay_ques, score_ind) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                               $cordovaSQLite.execute(db, querys, [_uid, _quid, _qids, _category_name, _qids_range, _oids, start_time, end_time, end_time, time_spent, time_spent_ind, score, percentage, q_result, status, institute_id, photo, essay_ques, score_ind]).then(function(res) {
                                   //  console.log(_qids);
                               }, function(err) {
                                   console.error(err);
-                               });
-                                 $ionicLoading.hide();
+                              });
+                              $ionicLoading.hide();
                               $location.path("/thankyou");
                           } else {
                               $ionicPopup.alert({
@@ -1720,4 +1629,36 @@
           Auth.logout();
           $location.path("/login");
       };
-  });
+  })
+
+
+  todoApp.controller('accessorController', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+      // Set Header
+      $scope.$parent.showHeader();
+      $scope.$parent.clearFabs();
+      $scope.isExpanded = false;
+      $scope.$parent.setExpanded(false);
+      $scope.$parent.setHeaderFab(false);
+
+      // Set Motion
+      $timeout(function() {
+          ionicMaterialMotion.slideUp({
+              selector: '.slide-up'
+          });
+      }, 300);
+
+      $timeout(function() {
+          ionicMaterialMotion.fadeSlideInRight({
+              startVelocity: 3000
+          });
+      }, 700);
+
+      // Set Ink
+      ionicMaterialInk.displayEffect();
+  })
+
+
+  todoApp.controller('pendingAssessmantCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+      // Set Header
+
+  })
