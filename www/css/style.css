@@ -379,3 +379,8 @@ background: #F7F7F7;
 .radio-positive .radio-icon:before{
   border-color: #0C63EE !important;
 }
+.attemp_buttom{height: 0px;
+    line-height: 33px;
+    font-size: 12px;
+    padding: 0 21px;}
+    .view_attempt{text-align: center;}

@@ -1,4 +1,4 @@
-<ion-view view-title="Completed Assessment">
+<ion-view view-title="Pending Assessment">
     <ion-nav-bar class="bar bar-header bar-calm" align-title="left">
 
     </ion-nav-bar>
@@ -13,46 +13,50 @@
 
         <div class="container">
             <div class="row">
-
+              <div class="col-5">
+              #
+              </div>
                 <div class="col-20">
                   Batch Id
                 </div>
-                <div class="col-40">
+                <div class="col-33">
                   Test Name
                 </div>
                 <div class="col-20">
-                  Start Time
+                  <center>Start Time</center>
                 </div>
                 <div class="col-20">
-                  End_Time
+                  <center>End_Time</center>
                 </div>
 
             </div>
         </div>
 
-        <div class="container2">
+        <div class="container2" ng-repeat = "completeassesment in  complete_assesment" >
             <div ng-animate="'animate'">
 
                 <div class="divider"></div>
 
                 <div class="row">
-
+                  <div class="col-5">
+                      <div class="date"> <b>{{$index+1}}</b></div>
+                  </div>
                     <div class="col-20">
-                        <div class="date"> <b>1 </b></div>
+                        <div class="date"> <b>{{completeassesment.batch_name}}</b></div>
 
                     </div>
 
-                    <div class="col-40">
+                    <div class="col-33">
 
-                        <div class="vch"> <b>Quality Control Chemical</b></div>
+                        <div class="vch"> <b>{{completeassesment.quiz_name}}</b></div>
 
                     </div>
                     <div class="col-20">
 
-                        <div class="credit"> <b> 21-jun-2017</b> </div>
+                      <center>  <div class="credit"> <b>{{completeassesment.batch_start| date:'dd-MM-yyyy  hh:mm:ss a '}} </b> </div></center>
                     </div>
                     <div class="col-20">
-                   <b>10:51:45</b>
+            <center>  <div class="credit"> <b>{{completeassesment.end_time| date:'dd-MM-yyyy  hh:mm:ss a'}} </b> </div></center>
 
 
 

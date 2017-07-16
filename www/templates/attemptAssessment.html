@@ -11,13 +11,15 @@
     </ion-nav-buttons>
     <ion-content>
 
-        <div class="container">
+        <div class="container" >
             <div class="row">
-
+                <div class = "col-5">
+                  #
+                </div>
                 <div class="col-20">
                   Batch Id
                 </div>
-                <div class="col-40">
+                <div class="col-33">
                   Test Name
                 </div>
                 <div class="col-20">
@@ -30,29 +32,32 @@
             </div>
         </div>
 
-        <div class="container2">
+        <div class="container2" ng-repeat = "upcoming in upcoming_assesment">
             <div ng-animate="'animate'">
 
                 <div class="divider"></div>
 
                 <div class="row">
+                  <div class="col-5">
+                      <div class="date"> <b>{{$index+1}} </b></div>
 
+                  </div>
                     <div class="col-20">
-                        <div class="date"> <b>1 </b></div>
+                        <div class="date"> <b>{{upcoming.batch_name}} </b></div>
 
                     </div>
 
-                    <div class="col-40">
+                    <div class="col-33">
 
-                        <div class="vch"> <b>Quality Control Chemical</b></div>
+                        <div class="vch"> <b>{{upcoming.quiz_name}}</b></div>
 
                     </div>
                     <div class="col-20">
 
-                        <div class="credit"> <b> 21-jun-2017</b> </div>
+                        <div class="credit"> <b> {{upcoming.start_time| date:'dd-MM-yyyy  hh:mm:ss a '}}</b> </div>
                     </div>
-                    <div class="col-20">
-                       <a href = "#/app/viewAttempt" class="button button-small button-royal">View & Attempt</a>
+                    <div class="col-20 view_attempt">
+                       <a href = "#/app/viewAttempt" class="button button-small button-royal attemp_buttom">View & Attempt</a>
 
 
 

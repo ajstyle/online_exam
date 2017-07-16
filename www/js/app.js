@@ -27,6 +27,28 @@
           }
       }
   });
+  todoApp.factory('AccessorAuth', function($cookieStore) {
+      var _user = $cookieStore.get('starter.user');
+      var setUser = function(user) {
+          _user = user;
+          $cookieStore.put('starter.user', _user);
+      }
+      var getUser = function() {
+          return _user;
+      }
+
+      return {
+          setUser: setUser,
+          isLoggedIn: function() {
+              return _user ? true : false;
+          },
+          getUser: getUser,
+          logout: function() {
+              $cookieStore.remove('starter.user');
+              _user = null;
+          }
+      }
+  });
   // Database for this App.
   todoApp.run(function($ionicPlatform, $cordovaSQLite) {
       $ionicPlatform.ready(function() {
@@ -244,7 +266,7 @@
               views: {
                   'menuContent': {
                       templateUrl: 'templates/attemptAssessment.html',
-                      //controller: 'attemptAssessmantCtrl'
+                      controller: 'attemptAssessmantCtrl'
                   },
 
               }
@@ -254,17 +276,17 @@
               views: {
                   'menuContent': {
                       templateUrl: 'templates/completeAssessment.html',
-                      //controller: 'attemptAssessmantCtrl'
+                      controller: 'completeAssessmantCtrl'
                   },
 
               }
           })
           .state('app.studentPassword', {
-              url: '/studentPassword',
+              url: '/studentPassword/:aid',
               views: {
                   'menuContent': {
                       templateUrl: 'templates/studentPassword.html',
-                      //controller: 'studentPasswordCtrl'
+                      controller: 'studentPasswordCtrl'
                   },
 
               }
@@ -287,6 +309,16 @@
                   'menuContent': {
                       templateUrl: 'templates/instruction.html',
                     //  controller: 'instructionCtrl'
+                  },
+
+              }
+          })
+          .state('app.viewPassword', {
+              url: '/viewPassword/:bid',
+              views: {
+                  'menuContent': {
+                      templateUrl: 'templates/viewPassword.html',
+                      controller: 'viewPasswordCtrl'
                   },
 
               }
@@ -348,7 +380,7 @@
    *  ionicPlatform   PlatformProvider
    *  cordovaSQLite
    */
-  todoApp.controller("CategoriesLogin", function($scope, $ionicPlatform, $http, $cordovaSQLite, $location, Auth, md5, $ionicLoading, $ionicPopup) {
+  todoApp.controller("CategoriesLogin", function($scope, $ionicPlatform, $http, $cordovaSQLite, $location, Auth,AccessorAuth, md5, $ionicLoading, $ionicPopup) {
       // Container for the categories in this Scope.
       $scope.loginData = [];
       $ionicPlatform.ready(function() {
@@ -368,20 +400,36 @@
           data.username = loginData.username;
           data.password = loginData.password;
           console.log(data);
-          $http.post('http://exam.imbueaura.com/index.php/api_new/signIn', data)
+          $http.post('http://192.168.1.5/exam/index.php/api_new/signIn', data)
               .then(
                   function(response) {
                       // success callback
-                      console.log(response);
-                      if (response.data != "false") {
+
+
+                    //Student Login
+                      if (response.data != "false" && response.data.su) {
                           console.log(response.data.id);
                           Auth.setUser({
                               username: data.username,
                               userid: response.data.id
                           });
+
                           $location.path("/quizs/" + response.data.id + "/" + response.data.bid);
                           $ionicLoading.hide();
-                      } else {
+                      }
+
+                      //Accessor login
+                       else if(response.data != "false" && !response.data.su){
+                        AccessorAuth.setUser({
+                           response: response.data
+                         });
+
+                         $location.path("/app/accessorDashboard");
+                         $ionicLoading.hide();
+                       }
+
+                      else {
+
                           $ionicPopup.alert({
                               title: 'Error!',
                               template: 'User name or password is wrong'
@@ -515,7 +563,7 @@
                    }
             output += key + '/'+value+'/';
             });
-               var url = 'http://exam.imbueaura.com/index.php/api/result/'+output+'format/json';
+               var url = 'http://192.168.1.5/exam/index.php/api/result/'+output+'format/json';
                var keyid = reslt.rows.item(k).id;
                var uid = reslt.rows.item(k).uid;
       console.log(output);
@@ -569,7 +617,7 @@
                               }
                               output += key + '/' + value + '/';
                           });
-                          var url = 'http://exam.imbueaura.com/index.php/api/result/' + output + 'format/json';
+                          var url = 'http://192.168.1.5/exam/index.php/api/result/' + output + 'format/json';
                           var keyid = reslt.rows.item(k).id;
                           // console.log(output);
                           $http.get(url).success(function(data, status) {
@@ -732,7 +780,7 @@
 
 
 
-      $http.get('http://exam.imbueaura.com/index.php/api/users/uid/' + uid + '/format/json')
+      $http.get('http://192.168.1.5/exam/index.php/api/users/uid/' + uid + '/format/json')
           .success(function(data, status, headers, config) {
 
               db.transaction(function(tx) {
@@ -807,7 +855,7 @@
                   });
               }
 
-              //     $http.get('http://exam.imbueaura.com/index.php/api/assessor/format/json')
+              //     $http.get('http://192.168.1.5/exam/index.php/api/assessor/format/json')
               // .success(function(data,status,headers,config){
               //         var assessor = data;
               //     for(i = 0; i<assessor.length; i++){
@@ -825,7 +873,7 @@
               //       });
               //          }
               //     });
-              $http.get('http://exam.imbueaura.com/index.php/api/batches/bid/' + batchid + '/format/json')
+              $http.get('http://192.168.1.5/exam/index.php/api/batches/bid/' + batchid + '/format/json')
                   .success(function(data, status, headers, config) {
                       var batch = data;
                       for (i = 0; i < batch.length; i++) {
@@ -841,7 +889,7 @@
                   });
 
 
-              $http.get('http://exam.imbueaura.com/index.php/api/assessorbatch/bid/' + batchid + '/format/json')
+              $http.get('http://192.168.1.5/exam/index.php/api/assessorbatch/bid/' + batchid + '/format/json')
                   .success(function(data, status, headers, config) {
                       var assessor = data;
                       for (i = 0; i < assessor.length; i++) {
@@ -856,7 +904,7 @@
                       }
                   });
 
-              $http.get('http://exam.imbueaura.com/index.php/api/tabs/format/json')
+              $http.get('http://192.168.1.5/exam/index.php/api/tabs/format/json')
                   .success(function(data, status, headers, config) {
                       var tab = data;
                       for (i = 0; i < tab.length; i++) {
@@ -871,7 +919,7 @@
                       }
                   });
 
-              $http.get('http://exam.imbueaura.com/index.php/api/quiz/bid/' + batchid + '/format/json')
+              $http.get('http://192.168.1.5/exam/index.php/api/quiz/bid/' + batchid + '/format/json')
                   .success(function(data, status, headers, config) {
                       var quiz = data;
                       angular.forEach(quiz, function(values, keys) {
@@ -891,7 +939,7 @@
                           var query = "INSERT INTO tblQuiz (quid,quiz_name,description,start_time,end_time,duration,pass_percentage,max_attempts,correct_score,incorrect_score,bid,gid) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
                           $cordovaSQLite.execute(db, query, [quid, quiz_name, description, start_time, end_time, duration, pass_percentage, max_attempts, correct_score, incorrect_score, bid, gid]).then(function(res) {
 
-                              $http.get('http://exam.imbueaura.com/index.php/api/printquiz/qid/' + quid + '/uid/' + uid + '/format/json')
+                              $http.get('http://192.168.1.5/exam/index.php/api/printquiz/qid/' + quid + '/uid/' + uid + '/format/json')
                                   .success(function(data, status, headers, config) {
 
                                       var ques = data;
@@ -909,7 +957,7 @@
                                               var query = "INSERT INTO Questions(rid,qid,quid,question) VALUES (?,?,?,?)";
                                               $cordovaSQLite.execute(db, query, [rid, qid, qtid, question]).then(function(res) {
                                                   console.log(res);
-                                                  $http.get('http://exam.imbueaura.com/index.php/api/printresult/rid/' + rid + '/format/json')
+                                                  $http.get('http://192.168.1.5/exam/index.php/api/printresult/rid/' + rid + '/format/json')
                                                       .success(function(data, status, headers, config) {
                                                           var result_q = data;
                                                           console.log(result_q);
@@ -1385,7 +1433,7 @@
                       }
 
                       console.log("data--------------", data);
-                      $http.post('http://exam.imbueaura.com/index.php/api/quiz_submit/format/json', data, config).then(function(success) {
+                      $http.post('http://192.168.1.5/exam/index.php/api/quiz_submit/format/json', data, config).then(function(success) {
                           $ionicLoading.show({
                               template: '<ion-spinner icon="ripple" class="spinner-calm"></ion-spinner><p class = "loader1">Please Wait ...</p>'
                               // noBackdrop: truecrescent
