@@ -101,14 +101,19 @@ p {
 /* Login
 ==================================*/
 
-.app-icon {
-    background-color: #fff;
-    background: url('../img/crown.png') center;
+
+  .app-icon {
+    background: #fff url(../img/glocal.png);
     background-size: cover;
     border-radius: 50%;
-    height: 125px;
+    height: 120px;
     margin: 0 auto;
-    width: 125px;
+    width: 120px;
+    background-size: 85%;
+    background-repeat: no-repeat;
+    background-position-y: 40px;
+    background-position-x: 10px;
+
 }
 
 .social-login {

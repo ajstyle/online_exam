@@ -54,7 +54,7 @@
                     <button class="button button-small button-border icon-left ion-arrow-left-b button-positive-900" ng-hide="index == 1" ng-click="itemClicked(index-1, queses_i[index-1].qid)">Previous</button>
                     <button class="button button-small button-border icon-right ion-arrow-right-b  button-calm-900" ng-hide="index == queses_i.length || queses[index].qid" ng-show="!queses[index].qid" ng-click="nextItem(index+1, queses_i[index].qid)">Next</button>
                     <button class="button button-small button-border icon-right ion-arrow-right-b  button-calm-900" ng-hide="index == queses_i.length || !queses[index].qid" ng-show="queses[index].qid" ng-click="itemClicked(index+1,queses_i[index-1].qid)">Next</button>
-                    <button ng-click="formSubmit()" id="formSubmit" class="button button-small button-border icon-left ion-arrow-return-right button-balanced" ng-show="index == queses_i.length">Submit</button>
+                    <button ng-click="showConfirm()" id="formSubmit" class="button button-small button-border icon-left ion-arrow-return-right button-balanced" ng-show="index == queses_i.length">Submit</button>
                 </div>
             </div>
         </form>

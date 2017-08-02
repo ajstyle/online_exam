@@ -13,13 +13,13 @@
 
         <div class="container" >
             <div class="row">
-                <div class = "col-5">
+                <div class = "col-10">
                   #
                 </div>
                 <div class="col-20">
                   Batch Id
                 </div>
-                <div class="col-33">
+                <div class="col-25">
                   Test Name
                 </div>
                 <div class="col-20">
@@ -38,7 +38,7 @@
                 <div class="divider"></div>
 
                 <div class="row">
-                  <div class="col-5">
+                  <div class="col-10">
                       <div class="date"> <b>{{$index+1}} </b></div>
 
                   </div>
@@ -47,7 +47,7 @@
 
                     </div>
 
-                    <div class="col-33">
+                    <div class="col-25">
 
                         <div class="vch"> <b>{{upcoming.quiz_name}}</b></div>
 
@@ -56,13 +56,23 @@
 
                         <div class="credit"> <b> {{upcoming.start_time| date:'dd-MM-yyyy  hh:mm:ss a '}}</b> </div>
                     </div>
+
+
+
+                    <div ng-if = "upcoming.pract_test == 0">
                     <div class="col-20 view_attempt">
-                       <a href = "#/app/viewAttempt" class="button button-small button-royal attemp_buttom">View & Attempt</a>
-
-
-
-
+                       <a href = "#/app/viewAttempt/{{upcoming.bid}}" class="button button-small button-royal attemp_buttom" ng-disabled = "true">Attempt by Student</a>
                 </div>
+              </div>
+
+
+
+
+                    <div ng-if = "upcoming.pract_test != 0">
+                    <div class="col-20 view_attempt">
+                       <a href = "#/app/viewAttempt/{{upcoming.bid}}" class="button button-small button-royal attemp_buttom">View & Attempt</a>
+                </div>
+              </div>
 
             </div>
         </div>
